@@ -1,0 +1,74 @@
+@charset "UTF-8";
+html {
+	width: 80%;
+	font-family: sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+body {
+	margin: 1;
+}
+
+/* ローディング画面 */
+#loading {
+  width: 100vw;
+  height: 100vh;
+  transition: all 1s;
+  background-color: #0bd;
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+}
+.spinner {
+  width: 100px;
+  height: 100px;
+  margin: 200px auto;
+  background-color: #fff;
+  border-radius: 100%;
+  animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+/* ローディングアニメーション */
+@keyframes sk-scaleout {
+  0% {
+    transform: scale(0);
+  } 100% {
+    transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+.loaded {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#app{
+	display:	flex;
+}
+#canvas {
+	width: 500px;
+	height: 500px;
+	margin: 0 0 0 0;
+}
+
+/* メディアクエリで画面を整形 PCファースト方式*/
+@media screen and (max-width: 660px) {
+	/* スマホ用　*/
+
+	#canvas{
+		max-width: 300px;
+		max-height: 300px;
+	}
+}
+@media screen and (max-width: 620px) {
+	#app{
+		display:	block;
+	}
+	#smart-flex{
+		display: flex;
+	}
+
+}
