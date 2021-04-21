@@ -750,75 +750,97 @@ window.onload = function(){
         const body_material = new THREE.MeshNormalMaterial();
         const body_geometry = new THREE.BoxGeometry(50,150,50);
         const body = new THREE.Mesh(body_geometry,body_material);
-        body.position.set(0,250,0);
-        this.human.add(body);
+        body.position.set(0,75,0);
+				//体グループ(ピボット管理用)
+	      const body_group = new THREE.Group();
+	      body_group.position.set(0,175,0);
+	      body_group.add(body);
+        this.human.add(body_group);
 
         //頭
         const head_geometry = new THREE.SphereGeometry(30,30,30);
         const head = new THREE.Mesh(head_geometry,body_material);
-        head.position.set(0,110,0);
-        body.add(head)
+        head.position.set(0,185,0);
+        body_group.add(head);
 
-        //腕
-        const arm_material =  new THREE.LineBasicMaterial({
-          color:'white'
-        });
-        const right_arm_points = [];
-        right_arm_points.push(new THREE.Vector3(0,0,0));
-        right_arm_points.push(new THREE.Vector3(-50,0,0));
-        const right_arm_geometry = new THREE.BufferGeometry().setFromPoints( right_arm_points );
-        const right_arm_1 = new THREE.Line( right_arm_geometry, arm_material );
+        //右腕
+				const arm_material =  new THREE.MeshNormalMaterial();
+	      const arm_geometry = new THREE.BoxGeometry(80,15,15);
+        const right_arm_1 = new THREE.Mesh( arm_geometry, arm_material );
+				right_arm_1.position.set(-40,0,0);
         const right_arm_2 = right_arm_1.clone();
-        right_arm_2.position.set(-50,0,0);
-        right_arm_1.add(right_arm_2);
-        right_arm_1.position.set(-25,75,0);
-        body.add(right_arm_1);
+        right_arm_2.position.set(-40,0,0);
+				//右腕グループ(ピボット管理用)
+	      const right_arm_group = new THREE.Group();
+	      right_arm_group.position.set(-25,130,0);
+	      const right_arm_group2 = new THREE.Group();
+	      right_arm_group2.position.set(-80,0,0);
+	      right_arm_group2.add(right_arm_2);
+	      right_arm_group.add(right_arm_group2);
+	      right_arm_group.add(right_arm_1);
+	      body_group.add(right_arm_group);
 
-        const left_arm_points = [];
-        left_arm_points.push(new THREE.Vector3(0,0,0));
-        left_arm_points.push(new THREE.Vector3(50,0,0));
-        const left_arm_geometry = new THREE.BufferGeometry().setFromPoints( left_arm_points );
-        const left_arm_1 = new THREE.Line( left_arm_geometry, arm_material );
-        const left_arm_2 = left_arm_1.clone();
-        left_arm_2.position.set(50,0,0);
-        left_arm_1.add(left_arm_2);
-        left_arm_1.position.set(25,75,0);
-        body.add(left_arm_1);
+
+				//左腕
+				const left_arm_1 = new THREE.Mesh( arm_geometry, arm_material );
+	      left_arm_1.position.set(40,0,0);
+	      //右前腕メッシュ
+	      const left_arm_2 = left_arm_1.clone();
+	      left_arm_2.position.set(40,0,0);
+	      //右腕グループ(ピボット管理用)
+	      const left_arm_group = new THREE.Group();
+	      left_arm_group.position.set(25,130,0);
+	      const left_arm_group2 = new THREE.Group();
+	      left_arm_group2.position.set(80,0,0);
+	      left_arm_group2.add(left_arm_2);
+	      left_arm_group.add(left_arm_group2);
+	      left_arm_group.add(left_arm_1);
+	      body_group.add(left_arm_group);
 
         //腰
         const waist_geometry = new THREE.BoxGeometry(50,20,50);
         const waist = new THREE.Mesh(waist_geometry, body_material);
-        this.human.add(waist);
-        waist.position.set(0,160,0);
+				const waist_group = new THREE.Group();
+				waist_group.position.set(0,170,0);
+				waist_group.add(waist);
+        this.human.add(waist_group);
 
-        //足
-        const foot_material =  new THREE.LineBasicMaterial({
-          color:'white'
-        });
-        const right_foot_points = [];
-        right_foot_points.push(new THREE.Vector3(0,0,0));
-        right_foot_points.push(new THREE.Vector3(0,-80,0));
-        const right_foot_geometry = new THREE.BufferGeometry().setFromPoints( right_foot_points );
-        const right_foot_1 = new THREE.Line( right_foot_geometry, foot_material );
-        const right_foot_2 = right_foot_1.clone();
-        right_foot_2.position.set(0,-80,0);
-        right_foot_1.add(right_foot_2);
-        right_foot_1.position.set(-25,0,0);
-        waist.add(right_foot_1);
 
-        const left_foot_points = [];
-        left_foot_points.push(new THREE.Vector3(0,0,0));
-        left_foot_points.push(new THREE.Vector3(0,-80,0));
-        const left_foot_geometry = new THREE.BufferGeometry().setFromPoints( left_foot_points );
-        const left_foot_1 = new THREE.Line( left_foot_geometry, foot_material );
-        const left_foot_2 = left_foot_1.clone();
-        left_foot_2.position.set(0,-80,0);
-        left_foot_1.add(left_foot_2);
-        left_foot_1.position.set(25,0,0);
-        waist.add(left_foot_1);
+        //右足
+				const foot_material =  new THREE.MeshNormalMaterial();
+	      const foot_geometry = new THREE.BoxGeometry(20,80,20);
+	      const right_foot_1 = new THREE.Mesh( foot_geometry, foot_material );
+	      right_foot_1.position.set(0,-40,0);
+	      const right_foot_2 = right_foot_1.clone();
+	      right_foot_2.position.set(0,-40,0);
+	      //右足グループ
+	      const right_foot_group = new THREE.Group();
+	      right_foot_group.position.set(-25,-10,0);
+	      const right_foot_group2 = new THREE.Group();
+	      right_foot_group2.position.set(0,-80,0);
+	      right_foot_group2.add(right_foot_2);
+	      right_foot_group.add(right_foot_group2);
+	      right_foot_group.add(right_foot_1);
+	      waist_group.add(right_foot_group);
+
+
+				//左足
+				const left_foot_1 = new THREE.Mesh( foot_geometry, foot_material );
+	      left_foot_1.position.set(0,-40,0);
+	      const left_foot_2 = left_foot_1.clone();
+	      left_foot_2.position.set(0,-40,0);
+	      //右足グループ
+	      const left_foot_group = new THREE.Group();
+	      left_foot_group.position.set(25,-10,0);
+	      const left_foot_group2 = new THREE.Group();
+	      left_foot_group2.position.set(0,-80,0);
+	      left_foot_group2.add(left_foot_2);
+	      left_foot_group.add(left_foot_group2);
+	      left_foot_group.add(left_foot_1);
+	      waist_group.add(left_foot_group);
 
 				this.human_clone = this.human.clone();
-				//humanは再生時のみaddする
+				//humanは再生時のみaddする, cloneを用いて画面上で編集
 				this.scene.add(this.human_clone);
 				//this.scene.add(this.human);
 
