@@ -56,6 +56,8 @@ window.onload = function(){
         camera:       				new THREE.PerspectiveCamera(45,1,1,10000),
         controls:     				0,
         light:        				new THREE.DirectionalLight(0xFFFFFF, 1),
+				//メッシュリストを保持(レイキャスターに使用x)
+				MeshList:							[],
 				//再生用のhuman(その他の部位も)
         human:        				new THREE.Group(),
 				//編集用のhuman
@@ -838,6 +840,19 @@ window.onload = function(){
 	      left_foot_group.add(left_foot_group2);
 	      left_foot_group.add(left_foot_1);
 	      waist_group.add(left_foot_group);
+
+				//レイキャスター利用のため、リストに保存
+				this.MeshList.push(body);
+	      this.MeshList.push(head);
+	      this.MeshList.push(waist);
+	      this.MeshList.push(right_arm_1);
+	      this.MeshList.push(right_arm_2);
+	      this.MeshList.push(left_arm_1);
+	      this.MeshList.push(left_arm_2);
+	      this.MeshList.push(right_foot_1);
+	      this.MeshList.push(right_foot_2);
+	      this.MeshList.push(left_foot_1);
+	      this.MeshList.push(left_foot_2);
 
 				this.human_clone = this.human.clone();
 				//humanは再生時のみaddする, cloneを用いて画面上で編集
