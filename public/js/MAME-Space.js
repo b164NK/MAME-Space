@@ -866,6 +866,8 @@ window.onload = function(){
 
 	                  this.canvas.addEventListener( this.eventmove, this.onDocumentMove, false );
 	                  this.canvas.addEventListener( this.eventend, this.onDocumentUp, false );
+
+										this.editingRenderLoop();
 	                }
 	              ).catch(error => {
 									console.log(error.toString());
@@ -903,6 +905,22 @@ window.onload = function(){
 	        console.log('ドロップ');
 					this.controls.enabled = false;
 
+				},
+				//編集中のレンダリングループ
+				editingRenderLoop:function(e){
+					//物体を回転させる
+	        if(flag_rot == 1){
+	          selected_Pivot.rotation.y = lon;
+	          selected_Pivot.rotation.x = lat;
+	          //console.log('rot');
+						//レンダリング
+		  			this.renderer.render(this.scene, this.camera);
+
+	        }else{
+						//console.log("ループ終了");
+						return;
+					}
+					requestAnimationFrame(this.editingRenderLoop);
 				}
 
       },
