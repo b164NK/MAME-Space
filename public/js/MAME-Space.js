@@ -99,6 +99,8 @@ window.onload = function(){
         light:        				new THREE.DirectionalLight(0xFFFFFF, 1),
 				//メッシュリストを保持(レイキャスターに使用)
 				MeshList:							[],
+				//ピボットリストを保持
+				PivotList:						[],
 				//マウス座標管理用のベクトルを生成
 				mouse:								new THREE.Vector2(),
 				//レイキャスターを作成
@@ -787,16 +789,11 @@ window.onload = function(){
 					const intersects = this.raycaster.intersectObjects(this.human.children, true);
 
 					if(intersects.length === 0){
-	          //カメラ操作へ
-	          console.log('カメラ捜査を開始');
-						//this.controls.enabled = true;
-						this.canvas.addEventListener(this.eventmove,this.OrbitMove);
-						this.canvas.addEventListener(this.eventend,this.OrbitEnd);
+	          console.log('パーツが見つかりませんでした');
 
 	        }else{
 	          //回転操作へ
 	          this.MeshList.map(mesh => {
-							this.controls.enabled = false;
 	            // 交差しているオブジェクトが1つ以上存在し、
 	            // 交差しているオブジェクトの1番目(最前面)のものだったら
 	            if (intersects.length > 0 && mesh === intersects[0].object) {
@@ -806,28 +803,28 @@ window.onload = function(){
 	                responce => {
 	                  console.log(responce);
 	                  //メッシュ選択(非同期処理1)
-	                  if(MeshList[0] == mesh){
-	                    selected_Pivot = body_group;
-	                  }else if(MeshList[1] == mesh){
-	                    selected_Pivot = body_group;
-	                  }else if(MeshList[2] == mesh){
-	                    selected_Pivot = waist_group;
-	                  }else if(MeshList[3] == mesh){
-	                    selected_Pivot = right_arm_group;
-	                  }else if(MeshList[4] == mesh){
-	                    selected_Pivot = right_arm_group2;
-	                  }else if(MeshList[5] == mesh){
-	                    selected_Pivot = left_arm_group;
-	                  }else if(MeshList[6] == mesh){
-	                    selected_Pivot = left_arm_group2;
-	                  }else if(MeshList[7] == mesh){
-	                    selected_Pivot = right_foot_group;
-	                  }else if(MeshList[8] == mesh){
-	                    selected_Pivot = right_foot_group2;
-	                  }else if(MeshList[9] == mesh){
-	                    selected_Pivot = left_foot_group;
-	                  }else if(MeshList[10] == mesh){
-	                    selected_Pivot = left_foot_group2;
+	                  if(this.MeshList[0] === mesh){
+	                    selected_Pivot = this.PivotList[0];
+	                  }else if(this.MeshList[1] === mesh){
+	                    selected_Pivot = this.PivotList[1];
+	                  }else if(this.MeshList[2] === mesh){
+	                    selected_Pivot = this.PivotList[2];
+	                  }else if(this.MeshList[3] === mesh){
+	                    selected_Pivot = this.PivotList[3];
+	                  }else if(this.MeshList[4] === mesh){
+	                    selected_Pivot = this.PivotList[4];
+	                  }else if(this.MeshList[5] === mesh){
+	                    selected_Pivot = this.PivotList[5];
+	                  }else if(this.MeshList[6] === mesh){
+	                    selected_Pivot = this.PivotList[6];
+	                  }else if(this.MeshList[7] === mesh){
+	                    selected_Pivot = this.PivotList[7];
+	                  }else if(this.MeshList[8] === mesh){
+	                    selected_Pivot = this.PivotList[8];
+	                  }else if(this.MeshList[9] === mesh){
+	                    selected_Pivot = this.PivotList[9];
+	                  }else if(this.MeshList[10] === mesh){
+	                    selected_Pivot = this.PivotList[10];
 	                  }
 	                  flag_hol = 1;
 	                  return asyncProcess(flag_hol);
@@ -867,13 +864,13 @@ window.onload = function(){
 	                    onMouseDownMouseY = e.changedTouches[0].clientY
 	                  }
 
-	                  this.canvas.addEventListener( this.eventmove, onDocumentMove, false );
-	                  this.canvas.addEventListener( this.eventend, onDocumentUp, false );
-	                },
-	                error => {
-	                  console.log('error');
+	                  this.canvas.addEventListener( this.eventmove, this.onDocumentMove, false );
+	                  this.canvas.addEventListener( this.eventend, this.onDocumentUp, false );
 	                }
-	              );
+	              ).catch(error => {
+									console.log(error.toString());
+									this.controls.enabled = false;
+								});
 	            }
 	          });
 	        }
@@ -897,13 +894,14 @@ window.onload = function(){
 
 				},
 				onDocumentUp:function(e){
-					this.canvas.removeEventListener( this.eventmove, onDocumentMouseMove, false );
-	        this.canvas.removeEventListener( this.eventend, onDocumentMouseUp, false );
+					this.canvas.removeEventListener( this.eventmove, this.onDocumentMove, false );
+	        this.canvas.removeEventListener( this.eventend, this.onDocumentUp, false );
 	        selected_Pivot = 0;
 	        flag_hol = 0;
 	        flag_sel = 0;
 	        flag_rot = 0;
 	        console.log('ドロップ');
+					this.controls.enabled = false;
 
 				}
 
@@ -1034,6 +1032,18 @@ window.onload = function(){
 	      this.MeshList.push(right_foot_2);
 	      this.MeshList.push(left_foot_1);
 	      this.MeshList.push(left_foot_2);
+
+				this.PivotList.push(body_group);
+				this.PivotList.push(body_group);
+				this.PivotList.push(waist_group);
+				this.PivotList.push(right_arm_group);
+				this.PivotList.push(right_arm_group2);
+				this.PivotList.push(left_arm_group);
+				this.PivotList.push(left_arm_group2);
+				this.PivotList.push(right_foot_group);
+				this.PivotList.push(right_foot_group2);
+				this.PivotList.push(left_foot_group);
+				this.PivotList.push(left_foot_group2);
 
 				this.human_clone = this.human.clone();
 				//human_cloneは再生時のみaddする, humanを用いて画面上で編集
@@ -1457,7 +1467,7 @@ window.onload = function(){
 				this.canvas.addEventListener(this.eventmove, this.handleMouseMove);
 				this.canvas.addEventListener(this.eventstart, this.grapObject, false);
 
-				this.controls.enabled = true;
+				//this.controls.enabled = false;
 				//this.canvas.addEventListener(this.eventstart,
 				//	this.OrbitStart,{passive:false});
 
