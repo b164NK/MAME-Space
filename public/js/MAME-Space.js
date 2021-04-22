@@ -10,6 +10,10 @@ window.onload = function(){
 	const EVENTNAME_MOVE = supportTouch? 'touchmove':'mousemove';
 	const EVENTNAME_END = supportTouch? 'touchend':'mouseup';
 
+
+	var onMouseDownMouseX = 0, onMouseDownMouseY = 0,
+	lon = 0, onMouseDownLon = 0,
+	lat = 0, onMouseDownLat = 0;
 	//非同期処理のためのフラッグ
 	//選択中のPivotを保持する変数
 	let selected_Pivot = 0;
@@ -778,8 +782,104 @@ window.onload = function(){
 	        this.mouse.y = -(y/h) * 2 + 1;
 				},
 				grapObject:function(e){
-					console.log("grap");
-					
+					e.preventDefault();
+					this.raycaster.setFromCamera(this.mouse, this.camera);
+					const intersects = this.raycaster.intersectObjects(this.human_clone.children, true);
+
+					if(intersects.length === 0){
+	          //カメラ操作へ
+	          console.log('カメラ捜査を開始');
+
+	        }else{
+	          //回転操作へ
+	          this.MeshList.map(mesh => {
+	            // 交差しているオブジェクトが1つ以上存在し、
+	            // 交差しているオブジェクトの1番目(最前面)のものだったら
+	            if (intersects.length > 0 && mesh === intersects[0].object) {
+	              console.log("find");
+	              flag_sel = 1;
+	              asyncProcess(flag_sel).then(
+	                responce => {
+	                  console.log(responce);
+	                  //メッシュ選択(非同期処理1)
+	                  if(MeshList[0] == mesh){
+	                    selected_Pivot = body_group;
+	                  }else if(MeshList[1] == mesh){
+	                    selected_Pivot = body_group;
+	                  }else if(MeshList[2] == mesh){
+	                    selected_Pivot = waist_group;
+	                  }else if(MeshList[3] == mesh){
+	                    selected_Pivot = right_arm_group;
+	                  }else if(MeshList[4] == mesh){
+	                    selected_Pivot = right_arm_group2;
+	                  }else if(MeshList[5] == mesh){
+	                    selected_Pivot = left_arm_group;
+	                  }else if(MeshList[6] == mesh){
+	                    selected_Pivot = left_arm_group2;
+	                  }else if(MeshList[7] == mesh){
+	                    selected_Pivot = right_foot_group;
+	                  }else if(MeshList[8] == mesh){
+	                    selected_Pivot = right_foot_group2;
+	                  }else if(MeshList[9] == mesh){
+	                    selected_Pivot = left_foot_group;
+	                  }else if(MeshList[10] == mesh){
+	                    selected_Pivot = left_foot_group2;
+	                  }
+	                  flag_hol = 1;
+	                  return asyncProcess(flag_hol);
+	                }
+	              ).then(
+	                responce => {
+	                  console.log('lon,latの設定');
+	                  lon = selected_Pivot.rotation.y;
+	                  lat = selected_Pivot.rotation.x;
+	                  return asyncProcess_q(1);
+	                }
+	              ).then(
+	                responce => {
+	                  console.log('lon,latの設定２');
+	                  onMouseDownLon = lon;
+	                  onMouseDownLat = lat;
+	                  return asyncProcess_q(1);
+	                }
+	              ).then(
+	                responce => {
+	                  console.log('flag_rotを立てる');
+	                  flag_rot = 1;
+
+	                  return asyncProcess(flag_rot)
+	                }
+	              ).then(
+	                response => {
+	                  console.log('イベントリスナー等の設定');
+	                  if(e.clientX) {
+	                    onMouseDownMouseX = e.clientX;
+	                    onMouseDownMouseY = e.clientY;
+	                  } else if(event.touches) {
+	                    onMouseDownMouseX = e.touches[0].clientX
+	                    onMouseDownMouseY = e.touches[0].clientY;
+	                  } else {
+	                    onMouseDownMouseX = e.changedTouches[0].clientX
+	                    onMouseDownMouseY = e.changedTouches[0].clientY
+	                  }
+
+	                  this.canvas.addEventListener( this.eventmove, onDocumentMove, false );
+	                  this.canvas.addEventListener( this.eventend, onDocumentUp, false );
+	                },
+	                error => {
+	                  console.log('error');
+	                }
+	              );
+	            }
+	          });
+	        }
+
+				},
+				onDocumentMove:function(){
+
+				},
+				onDocumentUp:function(){
+
 				}
 
       },
