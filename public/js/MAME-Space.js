@@ -119,6 +119,8 @@ window.onload = function(){
         actions:      				[],
 				//再生時にactionsをリセットする必要があるかのチェックをするフラグ
 				reset_flag:						false,
+				//カメラ操作と編集を切り替えるボタン
+				button_mes:						"現在:物体操作",
         eventstart:   				EVENTNAME_START,
         eventmove:    				EVENTNAME_MOVE,
         eventend:     				EVENTNAME_END
@@ -921,6 +923,22 @@ window.onload = function(){
 						return;
 					}
 					requestAnimationFrame(this.editingRenderLoop);
+				},
+				mode_change:function(e){
+					if(this.controls.enabled == false){
+						this.controls.enabled = true;
+						this.canvas.addEventListener(this.eventstart, this.OrbitStart,{passive:false});
+						this.canvas.removeEventListener(this.eventmove, this.handleMouseMove);
+						this.canvas.removeEventListener(this.eventstart, this.grapObject, false);
+						this.button_mes = "現在:視点操作";
+					}else if (this.controls.enabled == true) {
+						this.controls.enabled = false;
+						this.canvas.removeEventListener(this.eventstart, this.OrbitStart,{passive:false});
+						this.canvas.addEventListener(this.eventmove, this.handleMouseMove);
+						this.canvas.addEventListener(this.eventstart, this.grapObject, false);
+						this.button_mes = "現在:物体操作";
+					}
+
 				}
 
       },
@@ -1484,10 +1502,6 @@ window.onload = function(){
 
 				this.canvas.addEventListener(this.eventmove, this.handleMouseMove);
 				this.canvas.addEventListener(this.eventstart, this.grapObject, false);
-
-				//this.controls.enabled = false;
-				//this.canvas.addEventListener(this.eventstart,
-				//	this.OrbitStart,{passive:false});
 
 				spinner.classList.add('loaded');
       }
