@@ -10,6 +10,43 @@ window.onload = function(){
 	const EVENTNAME_MOVE = supportTouch? 'touchmove':'mousemove';
 	const EVENTNAME_END = supportTouch? 'touchend':'mouseup';
 
+	//非同期処理のためのフラッグ
+	//選択中のPivotを保持する変数
+	let selected_Pivot = 0;
+	//Meshが選択中かどうか判別するフラグ
+	let flag_sel = 0;
+	//選択されたメッシュのピボットが保持されたかを判別するフラグ
+	let flag_hol = 0;
+	//回転の許可を示すフラグ
+	let flag_rot = 0;
+
+	//Promiseコンストラクター
+	//flagを受け取って、正ならば次の処理に渡す
+	function asyncProcess(value){
+		return new Promise((resolve,reject) => {
+			setTimeout(() => {
+				if(value == 1){
+					resolve('選択されています');
+				}else{
+					reject('選択されていません');
+				}
+			},100);                       //flag が1になるのを待つための時間
+		});
+	}
+
+	//次のステップへ進めるための、仮のプロセス
+	function asyncProcess_q(value){
+		return new Promise((resolve,reject) => {
+			setTimeout(() => {
+				if(value){
+					resolve();
+				}else{
+					reject('error発生');
+				}
+			},0)
+		})
+	}
+
   // Get a reference to the database service
   var database = firebase.database();
 
@@ -56,8 +93,12 @@ window.onload = function(){
         camera:       				new THREE.PerspectiveCamera(45,1,1,10000),
         controls:     				0,
         light:        				new THREE.DirectionalLight(0xFFFFFF, 1),
-				//メッシュリストを保持(レイキャスターに使用x)
+				//メッシュリストを保持(レイキャスターに使用)
 				MeshList:							[],
+				//マウス座標管理用のベクトルを生成
+				mouse:								new THREE.Vector2(),
+				//レイキャスターを作成
+				raycaster:						new THREE.Raycaster(),
 				//再生用のhuman(その他の部位も)
         human:        				new THREE.Group(),
 				//編集用のhuman
@@ -724,6 +765,21 @@ window.onload = function(){
 					this.renderer.render(this.scene, this.camera);
 
 					renewDB(updates);
+				},
+				handleMouseMove:function(e){
+					const element = event.currentTarget;
+	        const x = event.clientX - element.offsetLeft;
+	        const y = event.clientY - element.offsetTop;
+
+	        const w = element.offsetWidth;
+	        const h = element.offsetHeight;
+
+	        this.mouse.x = (x/w) * 2 - 1;
+	        this.mouse.y = -(y/h) * 2 + 1;
+				},
+				grapObject:function(e){
+					console.log("grap");
+					
 				}
 
       },
@@ -1235,6 +1291,7 @@ window.onload = function(){
 				this.clips.push(clip_RightFoot);
 				this.clips.push(clip_LeftFoot);
 
+
 				var human_mixer = new THREE.AnimationMixer(this.human);
 		    var right_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[1]);
 		    var left_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[2]);
@@ -1272,9 +1329,13 @@ window.onload = function(){
 				this.controls.update();
         this.renderer.render(this.scene, this.camera);
 
-				this.controls.enabled = true;
-				this.canvas.addEventListener(this.eventstart,
-					this.OrbitStart,{passive:false});
+
+				this.canvas.addEventListener(this.eventmove, this.handleMouseMove);
+				this.canvas.addEventListener(this.eventstart, this.grapObject, false);
+
+				//this.controls.enabled = true;
+				//this.canvas.addEventListener(this.eventstart,
+				//	this.OrbitStart,{passive:false});
 
 				spinner.classList.add('loaded');
       }
