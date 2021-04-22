@@ -784,15 +784,19 @@ window.onload = function(){
 				grapObject:function(e){
 					e.preventDefault();
 					this.raycaster.setFromCamera(this.mouse, this.camera);
-					const intersects = this.raycaster.intersectObjects(this.human_clone.children, true);
+					const intersects = this.raycaster.intersectObjects(this.human.children, true);
 
 					if(intersects.length === 0){
 	          //カメラ操作へ
 	          console.log('カメラ捜査を開始');
+						//this.controls.enabled = true;
+						this.canvas.addEventListener(this.eventmove,this.OrbitMove);
+						this.canvas.addEventListener(this.eventend,this.OrbitEnd);
 
 	        }else{
 	          //回転操作へ
 	          this.MeshList.map(mesh => {
+							this.controls.enabled = false;
 	            // 交差しているオブジェクトが1つ以上存在し、
 	            // 交差しているオブジェクトの1番目(最前面)のものだったら
 	            if (intersects.length > 0 && mesh === intersects[0].object) {
@@ -875,10 +879,31 @@ window.onload = function(){
 	        }
 
 				},
-				onDocumentMove:function(){
+				onDocumentMove:function(e){
+					e.preventDefault();
+	        if(e.clientX) {
+	          var touchClientX = e.clientX;
+	          var touchClientY = e.clientY;
+	        } else if(e.touches) {
+	          var touchClientX = e.touches[0].clientX
+	          var touchClientY = e.touches[0].clientY;
+	        } else {
+	          var touchClientX = e.changedTouches[0].clientX
+	          var touchClientY = e.changedTouches[0].clientY
+	        }
+	        lon = ( touchClientX - onMouseDownMouseX ) * 0.01 + onMouseDownLon;
+	        lat = ( touchClientY - onMouseDownMouseY ) * 0.01 + onMouseDownLat;
+
 
 				},
-				onDocumentUp:function(){
+				onDocumentUp:function(e){
+					this.canvas.removeEventListener( this.eventmove, onDocumentMouseMove, false );
+	        this.canvas.removeEventListener( this.eventend, onDocumentMouseUp, false );
+	        selected_Pivot = 0;
+	        flag_hol = 0;
+	        flag_sel = 0;
+	        flag_rot = 0;
+	        console.log('ドロップ');
 
 				}
 
@@ -1011,9 +1036,8 @@ window.onload = function(){
 	      this.MeshList.push(left_foot_2);
 
 				this.human_clone = this.human.clone();
-				//humanは再生時のみaddする, cloneを用いて画面上で編集
-				this.scene.add(this.human_clone);
-				//this.scene.add(this.human);
+				//human_cloneは再生時のみaddする, humanを用いて画面上で編集
+				this.scene.add(this.human);
 
         //これより以下でfssからアニメーションクリップを作成
 				//各部位毎-各軸毎にKeyframeTrackJSONを作成
@@ -1433,7 +1457,7 @@ window.onload = function(){
 				this.canvas.addEventListener(this.eventmove, this.handleMouseMove);
 				this.canvas.addEventListener(this.eventstart, this.grapObject, false);
 
-				//this.controls.enabled = true;
+				this.controls.enabled = true;
 				//this.canvas.addEventListener(this.eventstart,
 				//	this.OrbitStart,{passive:false});
 
