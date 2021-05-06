@@ -101,6 +101,8 @@ window.onload = function(){
 				MeshList:							[],
 				//ピボットリストを保持
 				PivotList:						[],
+				//ピボットリストを子要素として保持（キーフレームアニメーションに使用）
+				AnimationList:				new THREE.Group(),
 				//マウス座標管理用のベクトルを生成
 				mouse:								new THREE.Vector2(),
 				//レイキャスターを作成
@@ -1081,8 +1083,13 @@ window.onload = function(){
 				this.PivotList.push(left_foot_group);
 				this.PivotList.push(left_foot_group2);
 
+
+
+
 				this.human_clone = this.human.clone();
+				
 				//human_cloneは再生時のみaddする, humanを用いて画面上で編集
+
 				this.scene.add(this.human);
 
         //これより以下でfssからアニメーションクリップを作成
@@ -1107,171 +1114,198 @@ window.onload = function(){
 				};
 
 				var rotationKeyframeTrackJSON_RightArm1_x = {
-					name:".rotation[x]",
+					//name:".rotation[x]",
+					name:".getObjectById(right_arm_group.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm1_y = {
-					name:".rotation[y]",
+					//name:".rotation[y]",
+					name:".getObjectById(right_arm_group.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm1_z = {
-					name:".rotation[z]",
+					//name:".rotation[z]",
+					name:".getObjectById(right_arm_group.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 
 				var rotationKeyframeTrackJSON_RightArm2_x = {
-					name:".children[0].rotation[x]",
+					//name:".children[0].rotation[x]",
+					name:".getObjectById(right_arm_group2.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm2_y = {
-					name:".children[0].rotation[y]",
+					//name:".children[0].rotation[y]",
+					name:".getObjectById(right_arm_group2.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm2_z = {
-					name:".children[0].rotation[z]",
+					//name:".children[0].rotation[z]",
+					name:".getObjectById(right_arm_group2.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 
 				var rotationKeyframeTrackJSON_LeftArm1_x = {
-					name:".rotation[x]",
+					//name:".rotation[x]",
+					name:".getObjectById(left_arm_group.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm1_y = {
-					name:".rotation[y]",
+					//name:".rotation[y]",
+					name:".getObjectById(left_arm_group.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm1_z = {
-					name:".rotation[z]",
+					//name:".rotation[z]",
+					name:".getObjectById(left_arm_group.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 
 				var rotationKeyframeTrackJSON_LeftArm2_x = {
-					name:".children[0].rotation[x]",
+					//name:".children[0].rotation[x]",
+					name:".getObjectById(left_arm_group2.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm2_y = {
-					name:".children[0].rotation[y]",
+					//name:".children[0].rotation[y]",
+					name:".getObjectById(left_arm_group2.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm2_z = {
-					name:".children[0].rotation[z]",
+					//name:".children[0].rotation[z]",
+					name:".getObjectById(left_arm_group2.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 
 				var rotationKeyframeTrackJSON_Waist_x = {
-					name:".children[1].rotation[x]",
+					//name:".children[1].rotation[x]",
+					name:".getObjectById(waist_group.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_Waist_y = {
-					name:".children[1].rotation[y]",
+					//name:".children[1].rotation[y]",
+					name:".getObjectById(waist_group.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_Waist_z = {
-					name:".children[1].rotation[z]",
+					//name:".children[1].rotation[z]",
+					name:".getObjectById(waist_group.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 
 				var rotationKeyframeTrackJSON_RightFoot1_x = {
-					name:".rotation[x]",
+					//name:".rotation[x]",
+					name:".getObjectById(right_foot_group.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot1_y = {
-					name:".rotation[y]",
+					//name:".rotation[y]",
+					name:".getObjectById(right_foot_group.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot1_z = {
-					name:".rotation[z]",
+					//name:".rotation[z]",
+					name:".getObjectById(right_foot_group.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 
 				var rotationKeyframeTrackJSON_RightFoot2_x = {
-					name:".children[0].rotation[x]",
+					//name:".children[0].rotation[x]",
+					name:".getObjectById(right_foot_group2.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot2_y = {
-					name:".children[0].rotation[y]",
+					//name:".children[0].rotation[y]",
+					name:".getObjectById(right_foot_group2.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot2_z = {
-					name:".children[0].rotation[z]",
+					//name:".children[0].rotation[z]",
+					name:".getObjectById(right_foot_group2.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 
 				var rotationKeyframeTrackJSON_LeftFoot1_x = {
-					name:".rotation[x]",
+					//name:".rotation[x]",
+					name:".getObjectById(left_foot_group.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot1_y = {
-					name:".rotation[y]",
+					//name:".rotation[y]",
+					name:".getObjectById(left_foot_group.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot1_z = {
-					name:".rotation[z]",
+					//name:".rotation[z]",
+					name:".getObjectById(left_foot_group.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 
 				var rotationKeyframeTrackJSON_LeftFoot2_x = {
-					name:".children[0].rotation[x]",
+					//name:".children[0].rotation[x]",
+					name:".getObjectById(left_foot_group2.id).rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot2_y = {
-					name:".children[0].rotation[y]",
+					//name:".children[0].rotation[y]",
+					name:".getObjectById(left_foot_group2.id).rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot2_z = {
-					name:".children[0].rotation[z]",
+					//name:".children[0].rotation[z]",
+					name:".getObjectById(left_foot_group2.id).rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1393,52 +1427,52 @@ window.onload = function(){
 
 						this.keyframetracks[15],
 						this.keyframetracks[16],
-						this.keyframetracks[17]
-					]
-				};
-				var clipJSON_RightArm = {
-					duration: 4,
-					name:"right_arm_animation",
-					tracks: [
+						this.keyframetracks[17],
+//					]
+//				};
+//				var clipJSON_RightArm = {
+//					duration: 4,
+//					name:"right_arm_animation",
+//					tracks: [
 						this.keyframetracks[3],
 						this.keyframetracks[4],
 						this.keyframetracks[5],
 
 						this.keyframetracks[6],
 						this.keyframetracks[7],
-						this.keyframetracks[8]
-					]
-				};
-				var clipJSON_LeftArm = {
-					duration: 4,
-					name:"left_arm_animation",
-					tracks: [
+						this.keyframetracks[8],
+//					]
+//				};
+//				var clipJSON_LeftArm = {
+//					duration: 4,
+//					name:"left_arm_animation",
+//					tracks: [
 						this.keyframetracks[9],
 						this.keyframetracks[10],
 						this.keyframetracks[11],
 
 						this.keyframetracks[12],
 						this.keyframetracks[13],
-						this.keyframetracks[14]
-					]
-				};
-				var clipJSON_RightFoot = {
-					duration: 4,
-					name:"right_foot_animation",
-					tracks: [
+						this.keyframetracks[14],
+//					]
+//				};
+//				var clipJSON_RightFoot = {
+//					duration: 4,
+//					name:"right_foot_animation",
+//					tracks: [
 						this.keyframetracks[18],
 						this.keyframetracks[19],
 						this.keyframetracks[20],
 
 						this.keyframetracks[21],
 						this.keyframetracks[22],
-						this.keyframetracks[23]
-					]
-				};
-				var clipJSON_LeftFoot = {
-					duration: 4,
-					name:"left_foot_animation",
-					tracks: [
+						this.keyframetracks[23],
+//					]
+//				};
+//				var clipJSON_LeftFoot = {
+//					duration: 4,
+//					name:"left_foot_animation",
+//					tracks: [
 						this.keyframetracks[24],
 						this.keyframetracks[25],
 						this.keyframetracks[26],
@@ -1450,51 +1484,58 @@ window.onload = function(){
 				};
 
 
-				var clip_Human = THREE.AnimationClip.parse(clipJSON_Human);
-				var clip_RightArm = THREE.AnimationClip.parse(clipJSON_RightArm);
-				var clip_LeftArm = THREE.AnimationClip.parse(clipJSON_LeftArm);
-				var clip_RightFoot = THREE.AnimationClip.parse(clipJSON_RightFoot);
-				var clip_LeftFoot = THREE.AnimationClip.parse(clipJSON_LeftFoot);
-				this.clips.push(clip_Human);
-				this.clips.push(clip_RightArm);
-				this.clips.push(clip_LeftArm);
-				this.clips.push(clip_RightFoot);
-				this.clips.push(clip_LeftFoot);
+				var clip_all = THREE.AnimationClip.parse(clipJSON_Human);
+				//var clip_Human = THREE.AnimationClip.parse(clipJSON_Human);
+				//var clip_RightArm = THREE.AnimationClip.parse(clipJSON_RightArm);
+				//var clip_LeftArm = THREE.AnimationClip.parse(clipJSON_LeftArm);
+				//var clip_RightFoot = THREE.AnimationClip.parse(clipJSON_RightFoot);
+				//var clip_LeftFoot = THREE.AnimationClip.parse(clipJSON_LeftFoot);
+				this.clips.push(clip_all);
+				//this.clips.push(clip_Human);
+				//this.clips.push(clip_RightArm);
+				//this.clips.push(clip_LeftArm);
+				//this.clips.push(clip_RightFoot);
+				//this.clips.push(clip_LeftFoot);
 
 
-				var human_mixer = new THREE.AnimationMixer(this.human);
-		    var right_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[1]);
-		    var left_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[2]);
-		    var right_foot_mixer = new THREE.AnimationMixer(this.human.children[1].children[0]);
-		    var left_foot_mixer = new THREE.AnimationMixer(this.human.children[1].children[1]);
-				this.mixers.push(human_mixer);
-				this.mixers.push(right_arm_mixer);
-				this.mixers.push(left_arm_mixer);
-				this.mixers.push(right_foot_mixer);
-				this.mixers.push(left_foot_mixer);
+				var all_mixer = new THREE.AnimationMixer(this.human);
+				//var human_mixer = new THREE.AnimationMixer(this.human);
+		    //var right_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[1]);
+		    //var left_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[2]);
+		    //var right_foot_mixer = new THREE.AnimationMixer(this.human.children[1].children[0]);
+		    //var left_foot_mixer = new THREE.AnimationMixer(this.human.children[1].children[1]);
+				this.mixers.push(all_mixer);
+				//this.mixers.push(human_mixer);
+				//this.mixers.push(right_arm_mixer);
+				//this.mixers.push(left_arm_mixer);
+				//this.mixers.push(right_foot_mixer);
+				//this.mixers.push(left_foot_mixer);
 
 
-		    var human_action = this.mixers[0].clipAction(this.clips[0]);
-		    var right_arm_action = this.mixers[1].clipAction(this.clips[1]);
-				var left_arm_action = this.mixers[2].clipAction(this.clips[2]);
-				var right_foot_action = this.mixers[3].clipAction(this.clips[3]);
-				var left_foot_action = this.mixers[4].clipAction(this.clips[4]);
-				this.actions.push(human_action);
-				this.actions.push(right_arm_action);
-				this.actions.push(left_arm_action);
-				this.actions.push(right_foot_action);
-				this.actions.push(left_foot_action);
+				var all_action = this.mixers[0].clipAction(this.clips[0]);
+		    //var human_action = this.mixers[0].clipAction(this.clips[0]);
+		    //var right_arm_action = this.mixers[1].clipAction(this.clips[1]);
+				//var left_arm_action = this.mixers[2].clipAction(this.clips[2]);
+				//var right_foot_action = this.mixers[3].clipAction(this.clips[3]);
+				//var left_foot_action = this.mixers[4].clipAction(this.clips[4]);
+				this.actions.push(all_action);
+				//this.actions.push(human_action);
+				//this.actions.push(right_arm_action);
+				//this.actions.push(left_arm_action);
+				//this.actions.push(right_foot_action);
+				//this.actions.push(left_foot_action);
+
 				//ループ設定(１回のみ)
 				this.actions[0].setLoop(THREE.LoopOnce);
-				this.actions[1].setLoop(THREE.LoopOnce);
-				this.actions[2].setLoop(THREE.LoopOnce);
-				this.actions[3].setLoop(THREE.LoopOnce);
-				this.actions[4].setLoop(THREE.LoopOnce);
+				//this.actions[1].setLoop(THREE.LoopOnce);
+				//this.actions[2].setLoop(THREE.LoopOnce);
+				//this.actions[3].setLoop(THREE.LoopOnce);
+				//this.actions[4].setLoop(THREE.LoopOnce);
 				this.actions[0].play();
-				this.actions[1].play();
-				this.actions[2].play();
-				this.actions[3].play();
-				this.actions[4].play();
+				//this.actions[1].play();
+				//this.actions[2].play();
+				//this.actions[3].play();
+				//this.actions[4].play();
 
 				this.controls.update();
         this.renderer.render(this.scene, this.camera);
@@ -1504,6 +1545,7 @@ window.onload = function(){
 				this.canvas.addEventListener(this.eventstart, this.grapObject, false);
 
 				spinner.classList.add('loaded');
+
       }
     });
   };
