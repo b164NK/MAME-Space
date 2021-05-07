@@ -355,48 +355,50 @@ window.onload = function(){
 				//アニメーションを再生する
 				animate:function(e){
 					//リセットが必要かどうかのチェック
-					if(this.reset_flag){
-						this.actions[0].reset();
-						this.actions[1].reset();
-						this.actions[2].reset();
-						this.actions[3].reset();
-						this.actions[4].reset();
-						this.reset_flag = false;
-					};
+					//if(this.reset_flag){
+					//	this.actions[0].reset();
+					//	this.actions[1].reset();
+					//	this.actions[2].reset();
+					//	this.actions[3].reset();
+					//	this.actions[4].reset();
+					//	this.reset_flag = false;
+					//};
 
 
 					console.log("再生中");
-					this.scene.remove(this.human_clone);
-					this.scene.add(this.human);
+					this.scene.remove(this.human);
+					this.scene.add(this.human_clone);
 
 
 					this.mixers[0].update(0.01);
-					this.mixers[1].update(0.01);
-					this.mixers[2].update(0.01);
-					this.mixers[3].update(0.01);
-					this.mixers[4].update(0.01);
+					//this.mixers[1].update(0.01);
+					//this.mixers[2].update(0.01);
+					//this.mixers[3].update(0.01);
+					//this.mixers[4].update(0.01);
 
 					this.controls.update();
 					this.renderer.render(this.scene, this.camera);
 
-					if(this.actions[0].isRunning() == false &&
-							this.actions[1].isRunning() == false &&
-							this.actions[2].isRunning() == false &&
-							this.actions[3].isRunning() == false &&
-							this.actions[4].isRunning() == false){
+					if(this.actions[0].isRunning() == false
+					 		//&&
+							//this.actions[1].isRunning() == false &&
+							//this.actions[2].isRunning() == false &&
+							//this.actions[3].isRunning() == false &&
+							//this.actions[4].isRunning() == false
+						){
 						const flag = true;
 						try {
 								if (flag) {
 										//アニメーションをもう一度再生する時に備えて
 										//リセットしておく
 										this.actions[0].reset();
-										this.actions[1].reset();
-										this.actions[2].reset();
-										this.actions[3].reset();
-										this.actions[4].reset();
+										//this.actions[1].reset();
+										//this.actions[2].reset();
+										//this.actions[3].reset();
+										//this.actions[4].reset();
 
-										this.scene.remove(this.human);
-										this.scene.add(this.human_clone);
+										this.scene.remove(this.human_clone);
+										this.scene.add(this.human);
 
 										throw new Error('終了します');
 								};
@@ -972,6 +974,7 @@ window.onload = function(){
         body.position.set(0,75,0);
 				//体グループ(ピボット管理用)
 	      const body_group = new THREE.Group();
+				body_group.name = "body_pivot";
 	      body_group.position.set(0,175,0);
 	      body_group.add(body);
         this.human.add(body_group);
@@ -991,8 +994,10 @@ window.onload = function(){
         right_arm_2.position.set(-40,0,0);
 				//右腕グループ(ピボット管理用)
 	      const right_arm_group = new THREE.Group();
+				right_arm_group.name = "right_arm_pivot";
 	      right_arm_group.position.set(-25,130,0);
 	      const right_arm_group2 = new THREE.Group();
+				right_arm_group2.name = "right_arm_2_pivot";
 	      right_arm_group2.position.set(-80,0,0);
 	      right_arm_group2.add(right_arm_2);
 	      right_arm_group.add(right_arm_group2);
@@ -1008,8 +1013,10 @@ window.onload = function(){
 	      left_arm_2.position.set(40,0,0);
 	      //右腕グループ(ピボット管理用)
 	      const left_arm_group = new THREE.Group();
+				left_arm_group.name = "left_arm_pivot";
 	      left_arm_group.position.set(25,130,0);
 	      const left_arm_group2 = new THREE.Group();
+				left_arm_group2.name = "left_arm_2_pivot";
 	      left_arm_group2.position.set(80,0,0);
 	      left_arm_group2.add(left_arm_2);
 	      left_arm_group.add(left_arm_group2);
@@ -1020,6 +1027,7 @@ window.onload = function(){
         const waist_geometry = new THREE.BoxGeometry(50,20,50);
         const waist = new THREE.Mesh(waist_geometry, body_material);
 				const waist_group = new THREE.Group();
+				waist_group.name = "waist_pivot";
 				waist_group.position.set(0,170,0);
 				waist_group.add(waist);
         this.human.add(waist_group);
@@ -1034,8 +1042,10 @@ window.onload = function(){
 	      right_foot_2.position.set(0,-40,0);
 	      //右足グループ
 	      const right_foot_group = new THREE.Group();
+				right_foot_group.name = "right_foot_pivot";
 	      right_foot_group.position.set(-25,-10,0);
 	      const right_foot_group2 = new THREE.Group();
+				right_foot_group2.name = "right_foot_2_pivot";
 	      right_foot_group2.position.set(0,-80,0);
 	      right_foot_group2.add(right_foot_2);
 	      right_foot_group.add(right_foot_group2);
@@ -1050,8 +1060,10 @@ window.onload = function(){
 	      left_foot_2.position.set(0,-40,0);
 	      //右足グループ
 	      const left_foot_group = new THREE.Group();
+				left_foot_group.name = "left_foot_pivot";
 	      left_foot_group.position.set(25,-10,0);
 	      const left_foot_group2 = new THREE.Group();
+				left_foot_group2.name = "left_foot_2_pivot";
 	      left_foot_group2.position.set(0,-80,0);
 	      left_foot_group2.add(left_foot_2);
 	      left_foot_group.add(left_foot_group2);
@@ -1087,7 +1099,7 @@ window.onload = function(){
 
 
 				this.human_clone = this.human.clone();
-				
+
 				//human_cloneは再生時のみaddする, humanを用いて画面上で編集
 
 				this.scene.add(this.human);
@@ -1115,21 +1127,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_RightArm1_x = {
 					//name:".rotation[x]",
-					name:".getObjectById(right_arm_group.id).rotation[x]",
+					name:"body_group_pivot/right_arm_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm1_y = {
 					//name:".rotation[y]",
-					name:".getObjectById(right_arm_group.id).rotation[y]",
+					name:"body_group_pivot/right_arm_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm1_z = {
 					//name:".rotation[z]",
-					name:".getObjectById(right_arm_group.id).rotation[z]",
+					name:"body_group_pivot/right_arm_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1137,21 +1149,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_RightArm2_x = {
 					//name:".children[0].rotation[x]",
-					name:".getObjectById(right_arm_group2.id).rotation[x]",
+					name:"body_group_pivot/right_arm_pivot/right_arm_2_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm2_y = {
 					//name:".children[0].rotation[y]",
-					name:".getObjectById(right_arm_group2.id).rotation[y]",
+					name:"body_group_pivot/right_arm_pivot/right_arm_2_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm2_z = {
 					//name:".children[0].rotation[z]",
-					name:".getObjectById(right_arm_group2.id).rotation[z]",
+					name:"body_group_pivot/right_arm_pivot/right_arm_2_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1159,21 +1171,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_LeftArm1_x = {
 					//name:".rotation[x]",
-					name:".getObjectById(left_arm_group.id).rotation[x]",
+					name:"body_group_pivot/left_arm_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm1_y = {
 					//name:".rotation[y]",
-					name:".getObjectById(left_arm_group.id).rotation[y]",
+					name:"body_group_pivot/left_arm_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm1_z = {
 					//name:".rotation[z]",
-					name:".getObjectById(left_arm_group.id).rotation[z]",
+					name:"body_group_pivot/left_arm_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1181,21 +1193,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_LeftArm2_x = {
 					//name:".children[0].rotation[x]",
-					name:".getObjectById(left_arm_group2.id).rotation[x]",
+					name:"body_group_pivot/left_arm_pivot/left_arm_2_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm2_y = {
 					//name:".children[0].rotation[y]",
-					name:".getObjectById(left_arm_group2.id).rotation[y]",
+					name:"body_group_pivot/left_arm_pivot/left_arm_2_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm2_z = {
 					//name:".children[0].rotation[z]",
-					name:".getObjectById(left_arm_group2.id).rotation[z]",
+					name:"body_group_pivot/left_arm_pivot/left_arm_2_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1203,21 +1215,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_Waist_x = {
 					//name:".children[1].rotation[x]",
-					name:".getObjectById(waist_group.id).rotation[x]",
+					name:"waist_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_Waist_y = {
 					//name:".children[1].rotation[y]",
-					name:".getObjectById(waist_group.id).rotation[y]",
+					name:"waist_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_Waist_z = {
 					//name:".children[1].rotation[z]",
-					name:".getObjectById(waist_group.id).rotation[z]",
+					name:"waist_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1225,21 +1237,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_RightFoot1_x = {
 					//name:".rotation[x]",
-					name:".getObjectById(right_foot_group.id).rotation[x]",
+					name:"waist_pivot/right_foot_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot1_y = {
 					//name:".rotation[y]",
-					name:".getObjectById(right_foot_group.id).rotation[y]",
+					name:"waist_pivot/right_foot_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot1_z = {
 					//name:".rotation[z]",
-					name:".getObjectById(right_foot_group.id).rotation[z]",
+					name:"waist_pivot/right_foot_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1247,21 +1259,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_RightFoot2_x = {
 					//name:".children[0].rotation[x]",
-					name:".getObjectById(right_foot_group2.id).rotation[x]",
+					name:"waist_pivot/right_foot_pivot/right_foot_2_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot2_y = {
 					//name:".children[0].rotation[y]",
-					name:".getObjectById(right_foot_group2.id).rotation[y]",
+					name:"waist_pivot/right_foot_pivot/right_foot_2_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot2_z = {
 					//name:".children[0].rotation[z]",
-					name:".getObjectById(right_foot_group2.id).rotation[z]",
+					name:"waist_pivot/right_foot_pivot/right_foot_2_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1269,21 +1281,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_LeftFoot1_x = {
 					//name:".rotation[x]",
-					name:".getObjectById(left_foot_group.id).rotation[x]",
+					name:"waist_pivot/left_foot_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot1_y = {
 					//name:".rotation[y]",
-					name:".getObjectById(left_foot_group.id).rotation[y]",
+					name:"waist_pivot/left_foot_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot1_z = {
 					//name:".rotation[z]",
-					name:".getObjectById(left_foot_group.id).rotation[z]",
+					name:"waist_pivot/left_foot_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1291,21 +1303,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_LeftFoot2_x = {
 					//name:".children[0].rotation[x]",
-					name:".getObjectById(left_foot_group2.id).rotation[x]",
+					name:"waist_pivot/left_foot_pivot/left_foot_2_pivot.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot2_y = {
 					//name:".children[0].rotation[y]",
-					name:".getObjectById(left_foot_group2.id).rotation[y]",
+					name:"waist_pivot/left_foot_pivot/left_foot_2_pivot.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot2_z = {
 					//name:".children[0].rotation[z]",
-					name:".getObjectById(left_foot_group2.id).rotation[z]",
+					name:"waist_pivot/left_foot_pivot/left_foot_2_pivot.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1498,7 +1510,7 @@ window.onload = function(){
 				//this.clips.push(clip_LeftFoot);
 
 
-				var all_mixer = new THREE.AnimationMixer(this.human);
+				var all_mixer = new THREE.AnimationMixer(this.human_clone);
 				//var human_mixer = new THREE.AnimationMixer(this.human);
 		    //var right_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[1]);
 		    //var left_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[2]);
