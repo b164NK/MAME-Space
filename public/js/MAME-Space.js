@@ -355,14 +355,14 @@ window.onload = function(){
 				//アニメーションを再生する
 				animate:function(e){
 					//リセットが必要かどうかのチェック
-					//if(this.reset_flag){
-					//	this.actions[0].reset();
+					if(this.reset_flag){
+						this.actions[0].reset();
 					//	this.actions[1].reset();
 					//	this.actions[2].reset();
 					//	this.actions[3].reset();
 					//	this.actions[4].reset();
-					//	this.reset_flag = false;
-					//};
+						this.reset_flag = false;
+					};
 
 
 					console.log("再生中");
@@ -415,75 +415,85 @@ window.onload = function(){
 				FrameSelect:function(e){
 					var time = this.bar_value;
 				  this.actions[0].time = time;
-					this.actions[1].time = time;
-					this.actions[2].time = time;
-					this.actions[3].time = time;
-					this.actions[4].time = time;
+					//this.actions[1].time = time;
+					//this.actions[2].time = time;
+					//this.actions[3].time = time;
+					//this.actions[4].time = time;
 
 				  this.mixers[0].time = time;
-					this.mixers[1].time = time;
-					this.mixers[2].time = time;
-					this.mixers[3].time = time;
-					this.mixers[4].time = time;
+					//this.mixers[1].time = time;
+					//this.mixers[2].time = time;
+					//this.mixers[3].time = time;
+					//this.mixers[4].time = time;
 
 				  this.mixers[0].update(0);
-					this.mixers[1].update(0);
-					this.mixers[2].update(0);
-					this.mixers[3].update(0);
-					this.mixers[4].update(0);
+					//this.mixers[1].update(0);
+					//this.mixers[2].update(0);
+					//this.mixers[3].update(0);
+					//this.mixers[4].update(0);
 
 
 					//actions,mixersによって算出されたrotationを
-					//human_cloneに適用する.
-					this.human_clone.children[0].rotation.set(
-						this.human.children[0].rotation.x,
-						this.human.children[0].rotation.y,
-						this.human.children[0].rotation.z
+					//編集用のhumanに適用する.
+					//体の回転
+					this.human.children[0].rotation.set(
+						this.human_clone.children[0].rotation.x,
+						this.human_clone.children[0].rotation.y,
+						this.human_clone.children[0].rotation.z
 					);
-					this.human_clone.children[0].children[1].rotation.set(
-						this.human.children[0].children[1].rotation.x,
-						this.human.children[0].children[1].rotation.y,
-						this.human.children[0].children[1].rotation.z
+					//右上腕の回転
+					this.human.children[0].children[2].rotation.set(
+						this.human_clone.children[0].children[2].rotation.x,
+						this.human_clone.children[0].children[2].rotation.y,
+						this.human_clone.children[0].children[2].rotation.z
 					);
-					this.human_clone.children[0].children[1].children[0].rotation.set(
-						this.human.children[0].children[1].children[0].rotation.x,
-						this.human.children[0].children[1].children[0].rotation.y,
-						this.human.children[0].children[1].children[0].rotation.z
+					//右前腕の回転
+					this.human.children[0].children[2].children[0].rotation.set(
+						this.human_clone.children[0].children[2].children[0].rotation.x,
+						this.human_clone.children[0].children[2].children[0].rotation.y,
+						this.human_clone.children[0].children[2].children[0].rotation.z
 					);
-					this.human_clone.children[0].children[2].rotation.set(
-						this.human.children[0].children[2].rotation.x,
-						this.human.children[0].children[2].rotation.y,
-						this.human.children[0].children[2].rotation.z
+					//左上腕の回転
+					this.human.children[0].children[3].rotation.set(
+						this.human_clone.children[0].children[3].rotation.x,
+						this.human_clone.children[0].children[3].rotation.y,
+						this.human_clone.children[0].children[3].rotation.z
 					);
-					this.human_clone.children[0].children[2].children[0].rotation.set(
-						this.human.children[0].children[2].children[0].rotation.x,
-						this.human.children[0].children[2].children[0].rotation.y,
-						this.human.children[0].children[2].children[0].rotation.z
+					//左前腕の回転
+					this.human.children[0].children[3].children[0].rotation.set(
+						this.human_clone.children[0].children[3].children[0].rotation.x,
+						this.human_clone.children[0].children[3].children[0].rotation.y,
+						this.human_clone.children[0].children[3].children[0].rotation.z
 					);
-					this.human_clone.children[1].rotation.set(
-						this.human.children[1].rotation.x,
-						this.human.children[1].rotation.y,
-						this.human.children[1].rotation.z
+					//腰の回転
+					this.human.children[1].rotation.set(
+						this.human_clone.children[1].rotation.x,
+						this.human_clone.children[1].rotation.y,
+						this.human_clone.children[1].rotation.z
 					);
-					this.human_clone.children[1].children[0].rotation.set(
-						this.human.children[1].children[0].rotation.x,
-						this.human.children[1].children[0].rotation.y,
-						this.human.children[1].children[0].rotation.z
+					//右大腿の回転
+					this.human.children[1].children[1].rotation.set(
+						this.human_clone.children[1].children[1].rotation.x,
+						this.human_clone.children[1].children[1].rotation.y,
+						this.human_clone.children[1].children[1].rotation.z
 					);
-					this.human_clone.children[1].children[0].children[0].rotation.set(
-						this.human.children[1].children[0].children[0].rotation.x,
-						this.human.children[1].children[0].children[0].rotation.y,
-						this.human.children[1].children[0].children[0].rotation.z
+					//右下腿の回転
+					this.human.children[1].children[1].children[0].rotation.set(
+						this.human_clone.children[1].children[1].children[0].rotation.x,
+						this.human_clone.children[1].children[1].children[0].rotation.y,
+						this.human_clone.children[1].children[1].children[0].rotation.z
 					);
-					this.human_clone.children[1].children[1].rotation.set(
-						this.human.children[1].children[1].rotation.x,
-						this.human.children[1].children[1].rotation.y,
-						this.human.children[1].children[1].rotation.z
+					//左大腿の回転
+					this.human.children[1].children[2].rotation.set(
+						this.human_clone.children[1].children[2].rotation.x,
+						this.human_clone.children[1].children[2].rotation.y,
+						this.human_clone.children[1].children[2].rotation.z
 					);
-					this.human_clone.children[1].children[1].children[0].rotation.set(
-						this.human.children[1].children[1].children[0].rotation.x,
-						this.human.children[1].children[1].children[0].rotation.y,
-						this.human.children[1].children[1].children[0].rotation.z
+					//左下腿の回転
+					this.human.children[1].children[2].children[0].rotation.set(
+						this.human_clone.children[1].children[2].children[0].rotation.x,
+						this.human_clone.children[1].children[2].children[0].rotation.y,
+						this.human_clone.children[1].children[2].children[0].rotation.z
 					);
 
 
@@ -493,19 +503,19 @@ window.onload = function(){
 					this.reset_flag = true;
 
 					//部位がすでに選ばれていれば、角度バーを更新
-					if(this.selected_parts != 0){
-						this.rotationX_bar = this.selected_parts.rotation.x;
-						this.rotationY_bar = this.selected_parts.rotation.y;
-						this.rotationZ_bar = this.selected_parts.rotation.z;
+					//if(this.selected_parts != 0){
+					//	this.rotationX_bar = this.selected_parts.rotation.x;
+					//	this.rotationY_bar = this.selected_parts.rotation.y;
+					//	this.rotationZ_bar = this.selected_parts.rotation.z;
 						//角度バーに反映された直後の値を保持
-						this.selected_parts_rotX = this.selected_parts.rotation.x;
-						this.selected_parts_rotY = this.selected_parts.rotation.y;
-						this.selected_parts_rotZ = this.selected_parts.rotation.z;
-					}else{
-						this.rotationX_bar = 0;
-						this.rotationY_bar = 0;
-						this.rotationZ_bar = 0;
-					};
+					//	this.selected_parts_rotX = this.selected_parts.rotation.x;
+					//	this.selected_parts_rotY = this.selected_parts.rotation.y;
+					//	this.selected_parts_rotZ = this.selected_parts.rotation.z;
+					//}else{
+					//	this.rotationX_bar = 0;
+					//	this.rotationY_bar = 0;
+					//	this.rotationZ_bar = 0;
+					//};
 
 				},
 				PartsSelect:function(e){

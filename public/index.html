@@ -58,6 +58,9 @@
       <div id="smart-flex">
         <button v-on:click="mode_change">{{button_mes}}</button>
         <button v-on:click="animate">アニメーションデータを元に再生</button>
+        <p>フレーム数:<input type="range" min="0" max="4" step="0.01"
+          v-model.number="bar_value"
+          v-on:change="FrameSelect">{{bar_value}}</p>
       </div>
     </div>
 
