@@ -61,6 +61,7 @@
         <p>フレーム数:<input type="range" min="0" max="4" step="0.01"
           v-model.number="bar_value"
           v-on:change="FrameSelect">{{bar_value}}</p>
+        <button v-on:click="makeUpdates">DB更新</button>
       </div>
     </div>
 

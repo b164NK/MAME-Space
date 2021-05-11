@@ -101,6 +101,8 @@ window.onload = function(){
 				MeshList:							[],
 				//ピボットリストを保持
 				PivotList:						[],
+				//オブジェクト別名前リスト
+				obj_name_list:				[],
 				//ピボットリストを子要素として保持（キーフレームアニメーションに使用）
 				AnimationList:				new THREE.Group(),
 				//マウス座標管理用のベクトルを生成
@@ -132,12 +134,12 @@ window.onload = function(){
         changed_DB_bySomeone:function(ss){
 					console.log("change DB");
 
-					//humanに対するアニメーションを停止
+					//human_cloneに対するアニメーションを停止
 					this.actions[0].stop();
-					this.actions[1].stop();
-					this.actions[2].stop();
-					this.actions[3].stop();
-					this.actions[4].stop();
+					//this.actions[1].stop();
+					//this.actions[2].stop();
+					//this.actions[3].stop();
+					//this.actions[4].stop();
 
 					//更新されたデータ(ss.child().val)をkeyframetracksに反映させる
 					//clips,mixers,actionsも作り直す
@@ -228,52 +230,52 @@ window.onload = function(){
 
 					    this.keyframetracks[15],
 					    this.keyframetracks[16],
-					    this.keyframetracks[17]
-					  ]
-					};
-					var clipJSON_RightArm = {
-					  duration: 4,
-					  name:"right_arm_animation",
-					  tracks: [
+					    this.keyframetracks[17],
+					//  ]
+					//};
+					//var clipJSON_RightArm = {
+					//  duration: 4,
+					//  name:"right_arm_animation",
+					//  tracks: [
 					    this.keyframetracks[3],
 					    this.keyframetracks[4],
 					    this.keyframetracks[5],
 
 					    this.keyframetracks[6],
 					    this.keyframetracks[7],
-					    this.keyframetracks[8]
-					  ]
-					};
-					var clipJSON_LeftArm = {
-					  duration: 4,
-					  name:"left_arm_animation",
-					  tracks: [
+					    this.keyframetracks[8],
+					//  ]
+					//};
+					//var clipJSON_LeftArm = {
+					//  duration: 4,
+					//  name:"left_arm_animation",
+					//  tracks: [
 					    this.keyframetracks[9],
 					    this.keyframetracks[10],
 					    this.keyframetracks[11],
 
 					    this.keyframetracks[12],
 					    this.keyframetracks[13],
-					    this.keyframetracks[14]
-					  ]
-					};
-					var clipJSON_RightFoot = {
-					  duration: 4,
-					  name:"right_foot_animation",
-					  tracks: [
+					    this.keyframetracks[14],
+					//  ]
+					//};
+					//var clipJSON_RightFoot = {
+					//  duration: 4,
+					//  name:"right_foot_animation",
+					//  tracks: [
 					    this.keyframetracks[18],
 					    this.keyframetracks[19],
 					    this.keyframetracks[20],
 
 					    this.keyframetracks[21],
 					    this.keyframetracks[22],
-					    this.keyframetracks[23]
-					  ]
-					};
-					var clipJSON_LeftFoot = {
-					  duration: 4,
-					  name:"left_foot_animation",
-					  tracks: [
+					    this.keyframetracks[23],
+					//  ]
+					//};
+					//var clipJSON_LeftFoot = {
+					//  duration: 4,
+					//  name:"left_foot_animation",
+					//  tracks: [
 					    this.keyframetracks[24],
 					    this.keyframetracks[25],
 					    this.keyframetracks[26],
@@ -285,49 +287,56 @@ window.onload = function(){
 					};
 
 
-					var clip_Human = THREE.AnimationClip.parse(clipJSON_Human);
-					var clip_RightArm = THREE.AnimationClip.parse(clipJSON_RightArm);
-					var clip_LeftArm = THREE.AnimationClip.parse(clipJSON_LeftArm);
-					var clip_RightFoot = THREE.AnimationClip.parse(clipJSON_RightFoot);
-					var clip_LeftFoot = THREE.AnimationClip.parse(clipJSON_LeftFoot);
-					this.clips.push(clip_Human);
-					this.clips.push(clip_RightArm);
-					this.clips.push(clip_LeftArm);
-					this.clips.push(clip_RightFoot);
-					this.clips.push(clip_LeftFoot);
+					var clip_all = THREE.AnimationClip.parse(clipJSON_Human);
+					//var clip_Human = THREE.AnimationClip.parse(clipJSON_Human);
+					//var clip_RightArm = THREE.AnimationClip.parse(clipJSON_RightArm);
+					//var clip_LeftArm = THREE.AnimationClip.parse(clipJSON_LeftArm);
+					//var clip_RightFoot = THREE.AnimationClip.parse(clipJSON_RightFoot);
+					//var clip_LeftFoot = THREE.AnimationClip.parse(clipJSON_LeftFoot);
+					this.clips.push(clip_all);
+					//this.clips.push(clip_Human);
+					//this.clips.push(clip_RightArm);
+					//this.clips.push(clip_LeftArm);
+					//this.clips.push(clip_RightFoot);
+					//this.clips.push(clip_LeftFoot);
 
-					var human_mixer = new THREE.AnimationMixer(this.human);
-					var right_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[1]);
-					var left_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[2]);
-					var right_foot_mixer = new THREE.AnimationMixer(this.human.children[1].children[0]);
-					var left_foot_mixer = new THREE.AnimationMixer(this.human.children[1].children[1]);
-					this.mixers.push(human_mixer);
-					this.mixers.push(right_arm_mixer);
-					this.mixers.push(left_arm_mixer);
-					this.mixers.push(right_foot_mixer);
-					this.mixers.push(left_foot_mixer);
+					var all_mixer = new THREE.AnimationMixer(this.human_clone);
+					//var human_mixer = new THREE.AnimationMixer(this.human);
+					//var right_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[1]);
+					//var left_arm_mixer = new THREE.AnimationMixer(this.human.children[0].children[2]);
+					//var right_foot_mixer = new THREE.AnimationMixer(this.human.children[1].children[0]);
+					//var left_foot_mixer = new THREE.AnimationMixer(this.human.children[1].children[1]);
+					this.mixers.push(all_mixer);
+					//this.mixers.push(human_mixer);
+					//this.mixers.push(right_arm_mixer);
+					//this.mixers.push(left_arm_mixer);
+					//this.mixers.push(right_foot_mixer);
+					//this.mixers.push(left_foot_mixer);
 
-					var human_action = this.mixers[0].clipAction(this.clips[0]);
-					var right_arm_action = this.mixers[1].clipAction(this.clips[1]);
-					var left_arm_action = this.mixers[2].clipAction(this.clips[2]);
-					var right_foot_action = this.mixers[3].clipAction(this.clips[3]);
-					var left_foot_action = this.mixers[4].clipAction(this.clips[4]);
-					this.actions.push(human_action);
-					this.actions.push(right_arm_action);
-					this.actions.push(left_arm_action);
-					this.actions.push(right_foot_action);
-					this.actions.push(left_foot_action);
+					var all_action = this.mixers[0].clipAction(this.clips[0]);
+					//var human_action = this.mixers[0].clipAction(this.clips[0]);
+					//var right_arm_action = this.mixers[1].clipAction(this.clips[1]);
+					//var left_arm_action = this.mixers[2].clipAction(this.clips[2]);
+					//var right_foot_action = this.mixers[3].clipAction(this.clips[3]);
+					//var left_foot_action = this.mixers[4].clipAction(this.clips[4]);
+					this.actions.push(all_action);
+					//this.actions.push(human_action);
+					//this.actions.push(right_arm_action);
+					//this.actions.push(left_arm_action);
+					//this.actions.push(right_foot_action);
+					//this.actions.push(left_foot_action);
+
 					//ループ設定(１回のみ)
 					this.actions[0].setLoop(THREE.LoopOnce);
-					this.actions[1].setLoop(THREE.LoopOnce);
-					this.actions[2].setLoop(THREE.LoopOnce);
-					this.actions[3].setLoop(THREE.LoopOnce);
-					this.actions[4].setLoop(THREE.LoopOnce);
+					//this.actions[1].setLoop(THREE.LoopOnce);
+					//this.actions[2].setLoop(THREE.LoopOnce);
+					//this.actions[3].setLoop(THREE.LoopOnce);
+					//this.actions[4].setLoop(THREE.LoopOnce);
 					this.actions[0].play();
-					this.actions[1].play();
-					this.actions[2].play();
-					this.actions[3].play();
-					this.actions[4].play();
+					//this.actions[1].play();
+					//this.actions[2].play();
+					//this.actions[3].play();
+					//this.actions[4].play();
 
 					//データベース変更が発生したことをユーザーに知らせるようにしたい
 					alert('Databaseが更新されました');
@@ -643,148 +652,53 @@ window.onload = function(){
 				makeUpdates:function(e){
 					console.log("makeUpdates");
 
-					//swicthを用いて、keyframetracksの中から指定部位のキーフレームトラック
-					//の3軸のインデックスナンバーを持ってくる
-					switch(this.selected_parts_name){
-						case 'body':
-							var keyframetrack_indexX = 0;
-							var keyframetrack_indexY = 1;
-							var keyframetrack_indexZ = 2;
-							break;
-						case 'right_arm_1':
-							var keyframetrack_indexX = 3;
-							var keyframetrack_indexY = 4;
-							var keyframetrack_indexZ = 5;
-							break;
-						case 'right_arm_2':
-							var keyframetrack_indexX = 6;
-							var keyframetrack_indexY = 7;
-							var keyframetrack_indexZ = 8;
-							break;
-						case 'left_arm_1':
-							var keyframetrack_indexX = 9;
-							var keyframetrack_indexY = 10;
-							var keyframetrack_indexZ = 11;
-							break;
-						case 'left_arm_2':
-							var keyframetrack_indexX = 12;
-							var keyframetrack_indexY = 13;
-							var keyframetrack_indexZ = 14;
-							break;
-						case 'waist':
-							var keyframetrack_indexX = 15;
-							var keyframetrack_indexY = 16;
-							var keyframetrack_indexZ = 17;
-							break;
-						case 'right_foot_1':
-							var keyframetrack_indexX = 18;
-							var keyframetrack_indexY = 19;
-							var keyframetrack_indexZ = 20;
-							break;
-						case 'right_foot_2':
-							var keyframetrack_indexX = 21;
-							var keyframetrack_indexY = 22;
-							var keyframetrack_indexZ = 23;
-							break;
-						case 'left_foot_1':
-							var keyframetrack_indexX = 24;
-							var keyframetrack_indexY = 25;
-							var keyframetrack_indexZ = 26;
-							break;
-						case 'left_foot_2':
-							var keyframetrack_indexX = 27;
-							var keyframetrack_indexY = 28;
-							var keyframetrack_indexZ = 29;
-							break;
-						default:
-							console.log("Error makeUpdates");
-							break;
-					};
+					//部位毎のループをまわす
+					for(var i=0; i<this.obj_name_list.length; i++){
+						//軸ごとのループを回す
+						for(var j=0; j<3; j++){
 
-					//x軸の変更をDBに反映するupdates作成
-					if(this.rotationX_bar != this.selected_parts_rotX){
-						for(var i=0; i<this.keyframetracks[keyframetrack_indexX].times.length; i++){
-							if(this.bar_value == this.keyframetracks[keyframetrack_indexX].times[i]){
-								//index番号が変数iと等しいvaluesをrotationX_barの値で更新
-								this.keyframetracks[keyframetrack_indexX].values[i] = this.rotationX_bar;
-								updates[this.selected_parts_name+"/x/values"] = this.keyframetracks[keyframetrack_indexX].values;
-								break;
-							}else if(this.bar_value < this.keyframetracks[keyframetrack_indexX].times[i]){
-								//index番号が変数iの位置のtimes,valuesそれぞれにbar_value,rotationX_barの値を追加
-								//それ以後のindex番号を一つずつずらす
-								this.keyframetracks[keyframetrack_indexX].times.splice(i,0,this.bar_value);
-								this.keyframetracks[keyframetrack_indexX].values.splice(i,0,this.rotationX_bar);
-								updates[this.selected_parts_name+"/x/times"] = this.keyframetracks[keyframetrack_indexX].times;
-								updates[this.selected_parts_name+"/x/values"] = this.keyframetracks[keyframetrack_indexX].values;
-								break;
-							}else if(i == this.keyframetracks[keyframetrack_indexX].times.length - 1){
-								//最後尾にtimes,valuesそれぞれbar_value,rotationX_barの値を末尾に追加
-								this.keyframetracks[keyframetrack_indexX].times.push(this.bar_value);
-								this.keyframetracks[keyframetrack_indexX].values.push(this.rotationX_bar);
-								updates[this.selected_parts_name+"/x/times"] = this.keyframetracks[keyframetrack_indexX].times;
-								updates[this.selected_parts_name+"/x/values"] = this.keyframetracks[keyframetrack_indexX].values;
-								break;
-							};
-						};
-					};
+							if(j == 0){
+								var rot_name = "x";
+							}else if (j == 1) {
+								var rot_name = "y";
+							}else if (j == 2) {
+								var rot_name = "z";
+							}
 
-					//y軸の変更をDBに反映するupdates作成
-					if(this.rotationY_bar != this.selected_parts_rotY){
-						for(var i=0; i<this.keyframetracks[keyframetrack_indexY].times.length; i++){
-							if(this.bar_value == this.keyframetracks[keyframetrack_indexY].times[i]){
-								//index番号が変数iと等しいvaluesをrotationY_barの値で更新
-								this.keyframetracks[keyframetrack_indexY].values[i] = this.rotationY_bar;
-								updates[this.selected_parts_name+"/y/values"] = this.keyframetracks[keyframetrack_indexY].values;
-								break;
-							}else if(this.bar_value < this.keyframetracks[keyframetrack_indexY].times[i]){
-								this.keyframetracks[keyframetrack_indexY].times.splice(i,0,this.bar_value);
-								this.keyframetracks[keyframetrack_indexY].values.splice(i,0,this.rotationY_bar);
-								updates[this.selected_parts_name+"/y/times"] = this.keyframetracks[keyframetrack_indexY].times;
-								updates[this.selected_parts_name+"/y/values"] = this.keyframetracks[keyframetrack_indexY].values;
-								break;
-							}else if(i == this.keyframetracks[keyframetrack_indexY].times.length - 1){
-								this.keyframetracks[keyframetrack_indexY].times.push(this.bar_value);
-								this.keyframetracks[keyframetrack_indexY].values.push(this.rotationY_bar);
-								updates[this.selected_parts_name+"/y/times"] = this.keyframetracks[keyframetrack_indexY].times;
-								updates[this.selected_parts_name+"/y/values"] = this.keyframetracks[keyframetrack_indexY].values;
-								break;
-							};
-						};
-					};
+							//bar_valueのチェック
+							for(var k=0; k<this.keyframetracks[i*3+j].times.length; k++){
 
-					//z軸の変更をDBに反映するupdates作成
-					if(this.rotationZ_bar != this.selected_parts_rotZ){
-						for(var i=0; i<this.keyframetracks[keyframetrack_indexZ].times.length; i++){
-							if(this.bar_value == this.keyframetracks[keyframetrack_indexZ].times[i]){
-								//index番号が変数iと等しいvaluesをrotationZ_barの値で更新
-								this.keyframetracks[keyframetrack_indexZ].values[i] = this.rotationZ_bar;
-								updates[this.selected_parts_name+"/z/values"] = this.keyframetracks[keyframetrack_indexZ].values;
-								break;
-							}else if(this.bar_value < this.keyframetracks[keyframetrack_indexZ].times[i]){
-								this.keyframetracks[keyframetrack_indexZ].times.splice(i,0,this.bar_value);
-								this.keyframetracks[keyframetrack_indexZ].values.splice(i,0,this.rotationZ_bar);
-								updates[this.selected_parts_name+"/z/times"] = this.keyframetracks[keyframetrack_indexZ].times;
-								updates[this.selected_parts_name+"/z/values"] = this.keyframetracks[keyframetrack_indexZ].values;
-								break;
-							}else if(i == this.keyframetracks[keyframetrack_indexZ].times.length - 1){
-								this.keyframetracks[keyframetrack_indexZ].times.push(this.bar_value);
-								this.keyframetracks[keyframetrack_indexZ].values.push(this.rotationZ_bar);
-								updates[this.selected_parts_name+"/z/times"] = this.keyframetracks[keyframetrack_indexZ].times;
-								updates[this.selected_parts_name+"/z/values"] = this.keyframetracks[keyframetrack_indexZ].values;
-								break;
-							};
-						};
-					};
+								if(this.bar_value == this.keyframetracks[i*3+j].times[k]){
+									//index番号が変数kと等しいvaluesを現在の回転値で更新
+									this.keyframetracks[i*3+j].values[k] = this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name];
+									updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
+									break;
+								}else if(this.bar_value < this.keyframetracks[i*3+j].times[k]){
+									//index番号が変数kの位置のtimes,valuesそれぞれにbar_value,現在の回転値を追加
+									//それ以後のindex番号を一つずつずらす
+									this.keyframetracks[i*3+j].times.splice(k,0,this.bar_value);
+									this.keyframetracks[i*3+j].values.splice(k,0,this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name]);
+									updates[this.obj_name_list[i]+"/"+rot_name+"/times"] = this.keyframetracks[i*3+j].times;
+									updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
+									break;
+								}else if(k == this.keyframetracks[i*3+j].times.length - 1){
+									//最後尾にtimes,valuesそれぞれbar_value,現在の回転値を末尾に追加
+									this.keyframetracks[i*3+j].times.push(this.bar_value);
+									this.keyframetracks[i*3+j].values.push(this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name]);
+									updates[this.obj_name_list[i]+"/"+rot_name+"/times"] = this.keyframetracks[i*3+j].times;
+									updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
+									break;
+								};
+							}
 
-					console.log(updates);
-					console.log("アニメーションを上記の内容で変更");
+						}
+					}
+					console.log("アニメーションを変更");
 					this.reset_flag = true;
 
-					//selected_parts_rotX等の修正
-
 					//お試し
-					this.controls.update();
-					this.renderer.render(this.scene, this.camera);
+					//this.controls.update();
+					//this.renderer.render(this.scene, this.camera);
 
 					renewDB(updates);
 				},
@@ -984,7 +898,7 @@ window.onload = function(){
         body.position.set(0,75,0);
 				//体グループ(ピボット管理用)
 	      const body_group = new THREE.Group();
-				body_group.name = "body_pivot";
+				body_group.name = "body";
 	      body_group.position.set(0,175,0);
 	      body_group.add(body);
         this.human.add(body_group);
@@ -1004,10 +918,10 @@ window.onload = function(){
         right_arm_2.position.set(-40,0,0);
 				//右腕グループ(ピボット管理用)
 	      const right_arm_group = new THREE.Group();
-				right_arm_group.name = "right_arm_pivot";
+				right_arm_group.name = "right_arm_1";
 	      right_arm_group.position.set(-25,130,0);
 	      const right_arm_group2 = new THREE.Group();
-				right_arm_group2.name = "right_arm_2_pivot";
+				right_arm_group2.name = "right_arm_2";
 	      right_arm_group2.position.set(-80,0,0);
 	      right_arm_group2.add(right_arm_2);
 	      right_arm_group.add(right_arm_group2);
@@ -1023,10 +937,10 @@ window.onload = function(){
 	      left_arm_2.position.set(40,0,0);
 	      //右腕グループ(ピボット管理用)
 	      const left_arm_group = new THREE.Group();
-				left_arm_group.name = "left_arm_pivot";
+				left_arm_group.name = "left_arm_1";
 	      left_arm_group.position.set(25,130,0);
 	      const left_arm_group2 = new THREE.Group();
-				left_arm_group2.name = "left_arm_2_pivot";
+				left_arm_group2.name = "left_arm_2";
 	      left_arm_group2.position.set(80,0,0);
 	      left_arm_group2.add(left_arm_2);
 	      left_arm_group.add(left_arm_group2);
@@ -1037,7 +951,7 @@ window.onload = function(){
         const waist_geometry = new THREE.BoxGeometry(50,20,50);
         const waist = new THREE.Mesh(waist_geometry, body_material);
 				const waist_group = new THREE.Group();
-				waist_group.name = "waist_pivot";
+				waist_group.name = "waist";
 				waist_group.position.set(0,170,0);
 				waist_group.add(waist);
         this.human.add(waist_group);
@@ -1052,10 +966,10 @@ window.onload = function(){
 	      right_foot_2.position.set(0,-40,0);
 	      //右足グループ
 	      const right_foot_group = new THREE.Group();
-				right_foot_group.name = "right_foot_pivot";
+				right_foot_group.name = "right_foot_1";
 	      right_foot_group.position.set(-25,-10,0);
 	      const right_foot_group2 = new THREE.Group();
-				right_foot_group2.name = "right_foot_2_pivot";
+				right_foot_group2.name = "right_foot_2";
 	      right_foot_group2.position.set(0,-80,0);
 	      right_foot_group2.add(right_foot_2);
 	      right_foot_group.add(right_foot_group2);
@@ -1070,10 +984,10 @@ window.onload = function(){
 	      left_foot_2.position.set(0,-40,0);
 	      //右足グループ
 	      const left_foot_group = new THREE.Group();
-				left_foot_group.name = "left_foot_pivot";
+				left_foot_group.name = "left_foot_1";
 	      left_foot_group.position.set(25,-10,0);
 	      const left_foot_group2 = new THREE.Group();
-				left_foot_group2.name = "left_foot_2_pivot";
+				left_foot_group2.name = "left_foot_2";
 	      left_foot_group2.position.set(0,-80,0);
 	      left_foot_group2.add(left_foot_2);
 	      left_foot_group.add(left_foot_group2);
@@ -1105,6 +1019,17 @@ window.onload = function(){
 				this.PivotList.push(left_foot_group);
 				this.PivotList.push(left_foot_group2);
 
+				//DBの更新用の部位別文字列配列を定義
+				this.obj_name_list.push("body");
+				this.obj_name_list.push("right_arm_1");
+				this.obj_name_list.push("right_arm_2");
+				this.obj_name_list.push("left_arm_1");
+				this.obj_name_list.push("left_arm_2");
+				this.obj_name_list.push("waist");
+				this.obj_name_list.push("right_foot_1");
+				this.obj_name_list.push("right_foot_2");
+				this.obj_name_list.push("left_foot_1");
+				this.obj_name_list.push("left_foot_2");
 
 
 
@@ -1137,21 +1062,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_RightArm1_x = {
 					//name:".rotation[x]",
-					name:"body_group_pivot/right_arm_pivot.rotation[x]",
+					name:"body/right_arm_1.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm1_y = {
 					//name:".rotation[y]",
-					name:"body_group_pivot/right_arm_pivot.rotation[y]",
+					name:"body/right_arm_1.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm1_z = {
 					//name:".rotation[z]",
-					name:"body_group_pivot/right_arm_pivot.rotation[z]",
+					name:"body/right_arm_1.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1159,21 +1084,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_RightArm2_x = {
 					//name:".children[0].rotation[x]",
-					name:"body_group_pivot/right_arm_pivot/right_arm_2_pivot.rotation[x]",
+					name:"body/right_arm_1/right_arm_2.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm2_y = {
 					//name:".children[0].rotation[y]",
-					name:"body_group_pivot/right_arm_pivot/right_arm_2_pivot.rotation[y]",
+					name:"body/right_arm_1/right_arm_2.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightArm2_z = {
 					//name:".children[0].rotation[z]",
-					name:"body_group_pivot/right_arm_pivot/right_arm_2_pivot.rotation[z]",
+					name:"body/right_arm_1/right_arm_2.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1181,21 +1106,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_LeftArm1_x = {
 					//name:".rotation[x]",
-					name:"body_group_pivot/left_arm_pivot.rotation[x]",
+					name:"body/left_arm_1.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm1_y = {
 					//name:".rotation[y]",
-					name:"body_group_pivot/left_arm_pivot.rotation[y]",
+					name:"body/left_arm_1.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm1_z = {
 					//name:".rotation[z]",
-					name:"body_group_pivot/left_arm_pivot.rotation[z]",
+					name:"body/left_arm_1.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1203,21 +1128,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_LeftArm2_x = {
 					//name:".children[0].rotation[x]",
-					name:"body_group_pivot/left_arm_pivot/left_arm_2_pivot.rotation[x]",
+					name:"body/left_arm_1/left_arm_2.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm2_y = {
 					//name:".children[0].rotation[y]",
-					name:"body_group_pivot/left_arm_pivot/left_arm_2_pivot.rotation[y]",
+					name:"body/left_arm_1/left_arm_2.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftArm2_z = {
 					//name:".children[0].rotation[z]",
-					name:"body_group_pivot/left_arm_pivot/left_arm_2_pivot.rotation[z]",
+					name:"body/left_arm_1/left_arm_2.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1225,21 +1150,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_Waist_x = {
 					//name:".children[1].rotation[x]",
-					name:"waist_pivot.rotation[x]",
+					name:"waist.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_Waist_y = {
 					//name:".children[1].rotation[y]",
-					name:"waist_pivot.rotation[y]",
+					name:"waist.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_Waist_z = {
 					//name:".children[1].rotation[z]",
-					name:"waist_pivot.rotation[z]",
+					name:"waist.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1247,21 +1172,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_RightFoot1_x = {
 					//name:".rotation[x]",
-					name:"waist_pivot/right_foot_pivot.rotation[x]",
+					name:"waist/right_foot_1.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot1_y = {
 					//name:".rotation[y]",
-					name:"waist_pivot/right_foot_pivot.rotation[y]",
+					name:"waist/right_foot_1.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot1_z = {
 					//name:".rotation[z]",
-					name:"waist_pivot/right_foot_pivot.rotation[z]",
+					name:"waist/right_foot_1.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1269,21 +1194,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_RightFoot2_x = {
 					//name:".children[0].rotation[x]",
-					name:"waist_pivot/right_foot_pivot/right_foot_2_pivot.rotation[x]",
+					name:"waist/right_foot_1/right_foot_2.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot2_y = {
 					//name:".children[0].rotation[y]",
-					name:"waist_pivot/right_foot_pivot/right_foot_2_pivot.rotation[y]",
+					name:"waist/right_foot_1/right_foot_2.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_RightFoot2_z = {
 					//name:".children[0].rotation[z]",
-					name:"waist_pivot/right_foot_pivot/right_foot_2_pivot.rotation[z]",
+					name:"waist/right_foot_1/right_foot_2.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1291,21 +1216,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_LeftFoot1_x = {
 					//name:".rotation[x]",
-					name:"waist_pivot/left_foot_pivot.rotation[x]",
+					name:"waist/left_foot_1.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot1_y = {
 					//name:".rotation[y]",
-					name:"waist_pivot/left_foot_pivot.rotation[y]",
+					name:"waist/left_foot_1.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot1_z = {
 					//name:".rotation[z]",
-					name:"waist_pivot/left_foot_pivot.rotation[z]",
+					name:"waist/left_foot_1.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
@@ -1313,21 +1238,21 @@ window.onload = function(){
 
 				var rotationKeyframeTrackJSON_LeftFoot2_x = {
 					//name:".children[0].rotation[x]",
-					name:"waist_pivot/left_foot_pivot/left_foot_2_pivot.rotation[x]",
+					name:"waist/left_foot_1/left_foot_2.rotation[x]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot2_y = {
 					//name:".children[0].rotation[y]",
-					name:"waist_pivot/left_foot_pivot/left_foot_2_pivot.rotation[y]",
+					name:"waist/left_foot_1/left_foot_2.rotation[y]",
 					type:"number",
 					times:[0],
 					values:[0]
 				};
 				var rotationKeyframeTrackJSON_LeftFoot2_z = {
 					//name:".children[0].rotation[z]",
-					name:"waist_pivot/left_foot_pivot/left_foot_2_pivot.rotation[z]",
+					name:"waist/left_foot_1/left_foot_2.rotation[z]",
 					type:"number",
 					times:[0],
 					values:[0]
