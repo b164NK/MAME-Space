@@ -51,6 +51,7 @@ window.onload = function(){
 		})
 	}
 
+
   // Get a reference to the database service
   var database = firebase.database();
 
@@ -60,13 +61,24 @@ window.onload = function(){
 	//更新内容を一時保存する変数
 	var updates = {};
 
+	//起動ブラウザのtimeOriginを表示
+	console.log("timeOrgin: "+performance.timeOrigin);
+	//処理時間計測用・更新ボタン押した時
+	var startTime = 0;
+
+
 	function renewDB(update_set){
 		//update_setは、行われたDOM操作に関して記録したリストとする
 		if(update_set != {}){
 			console.log("DB update");
+			const DBupdStart = performance.now();
 			database.ref("/student/AnimationClip").update(update_set);
+			const DBupdEnd = performance.now();
+			console.log("更新時間: "+ (DBupdEnd - DBupdStart));
 			//updatesを初期化
 			updates = {};
+		}else{
+			console.log("updates is Empty");
 		};
 	};
 
@@ -338,12 +350,7 @@ window.onload = function(){
 					//this.actions[3].play();
 					//this.actions[4].play();
 
-					//データベース変更が発生したことをユーザーに知らせるようにしたい
-					alert('Databaseが更新されました');
-
-					//フレーム数が指定されていたら...
-
-					//部位が選択されていたら...
+					//console.log("Hello by change")
 
         },
 				//Orbit操作に対して描画を更新するためのメソッド
@@ -650,57 +657,73 @@ window.onload = function(){
 				},
 				//更新ボタンが押された時、更新内容を作成しDBに反映
 				makeUpdates:function(e){
-					console.log("makeUpdates");
+					//最初に実行する処理
+					const awaitFunc1 = async() => {
+						console.log("makeUpdates");
+						//データベース書き込みにかかる時間を測る
+						startTime = performance.now();
+						//１台のマシンが行なった操作が、他方のマシンに反映されるまでの時間を測る
+						console.log("更新ボタンが押された: "+startTime);
 
-					//部位毎のループをまわす
-					for(var i=0; i<this.obj_name_list.length; i++){
-						//軸ごとのループを回す
-						for(var j=0; j<3; j++){
+					};
 
-							if(j == 0){
-								var rot_name = "x";
-							}else if (j == 1) {
-								var rot_name = "y";
-							}else if (j == 2) {
-								var rot_name = "z";
+					const awaitFunc2 = async() => {
+						await awaitFunc1();
+						//部位毎のループをまわす
+						for(var i=0; i<this.obj_name_list.length; i++){
+							//軸ごとのループを回す
+							for(var j=0; j<3; j++){
+
+								if(j == 0){
+									var rot_name = "x";
+								}else if (j == 1) {
+									var rot_name = "y";
+								}else if (j == 2) {
+									var rot_name = "z";
+								}
+
+								//bar_valueのチェック
+								for(var k=0; k<this.keyframetracks[i*3+j].times.length; k++){
+
+									if(this.bar_value == this.keyframetracks[i*3+j].times[k]){
+										//index番号が変数kと等しいvaluesを現在の回転値で更新
+										this.keyframetracks[i*3+j].values[k] = this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name];
+										updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
+										break;
+									}else if(this.bar_value < this.keyframetracks[i*3+j].times[k]){
+										//index番号が変数kの位置のtimes,valuesそれぞれにbar_value,現在の回転値を追加
+										//それ以後のindex番号を一つずつずらす
+										this.keyframetracks[i*3+j].times.splice(k,0,this.bar_value);
+										this.keyframetracks[i*3+j].values.splice(k,0,this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name]);
+										updates[this.obj_name_list[i]+"/"+rot_name+"/times"] = this.keyframetracks[i*3+j].times;
+										updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
+										break;
+									}else if(k == this.keyframetracks[i*3+j].times.length - 1){
+										//最後尾にtimes,valuesそれぞれbar_value,現在の回転値を末尾に追加
+										this.keyframetracks[i*3+j].times.push(this.bar_value);
+										this.keyframetracks[i*3+j].values.push(this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name]);
+										updates[this.obj_name_list[i]+"/"+rot_name+"/times"] = this.keyframetracks[i*3+j].times;
+										updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
+										break;
+									};
+								}
 							}
-
-							//bar_valueのチェック
-							for(var k=0; k<this.keyframetracks[i*3+j].times.length; k++){
-
-								if(this.bar_value == this.keyframetracks[i*3+j].times[k]){
-									//index番号が変数kと等しいvaluesを現在の回転値で更新
-									this.keyframetracks[i*3+j].values[k] = this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name];
-									updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
-									break;
-								}else if(this.bar_value < this.keyframetracks[i*3+j].times[k]){
-									//index番号が変数kの位置のtimes,valuesそれぞれにbar_value,現在の回転値を追加
-									//それ以後のindex番号を一つずつずらす
-									this.keyframetracks[i*3+j].times.splice(k,0,this.bar_value);
-									this.keyframetracks[i*3+j].values.splice(k,0,this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name]);
-									updates[this.obj_name_list[i]+"/"+rot_name+"/times"] = this.keyframetracks[i*3+j].times;
-									updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
-									break;
-								}else if(k == this.keyframetracks[i*3+j].times.length - 1){
-									//最後尾にtimes,valuesそれぞれbar_value,現在の回転値を末尾に追加
-									this.keyframetracks[i*3+j].times.push(this.bar_value);
-									this.keyframetracks[i*3+j].values.push(this.human.getObjectByName(this.obj_name_list[i]).rotation[rot_name]);
-									updates[this.obj_name_list[i]+"/"+rot_name+"/times"] = this.keyframetracks[i*3+j].times;
-									updates[this.obj_name_list[i]+"/"+rot_name+"/values"] = this.keyframetracks[i*3+j].values;
-									break;
-								};
-							}
-
 						}
-					}
-					console.log("アニメーションを変更");
-					this.reset_flag = true;
+						//console.log("アニメーションを変更");
+						this.reset_flag = true;
+					};
+					const asyncFunc = async() => {
+						await awaitFunc2();
+						renewDB(updates);
+					};
+
+					asyncFunc().then(() => console.log('Fulfilled')).catch(() => console.log('Rejected'))
 
 					//お試し
 					//this.controls.update();
 					//this.renderer.render(this.scene, this.camera);
 
-					renewDB(updates);
+
 				},
 				handleMouseMove:function(e){
 					const element = event.currentTarget;
@@ -1497,10 +1520,39 @@ window.onload = function(){
     });
   };
 
+	//アニメーションデータの更新処理の計測用
+	var updateTime = 0;
+
   function waitRTDBload(){
     database.ref('/student').on('value',function(snapshot){
       if(!first){
-        vm.changed_DB_bySomeone(snapshot);
+				//Promiseを用いて計測・アラート
+				//asyncProcess(1).then(
+				//	responce => {
+		    //   vm.changed_DB_bySomeone(snapshot);
+				//		return asyncProcess_q(1);
+				//	}
+				//).then(
+				//	responce => {
+				//		console.log("他方マシン: "+performance.now());
+				//		console.log('Databaseが更新されました');
+				//	}
+				//).catch(error => {
+				//	console.log(error.toString());
+				//});
+				const awaitFunc3 = async() => {
+					updateTime = performance.now();
+					vm.changed_DB_bySomeone(snapshot);
+				};
+				const asyncFunc1 = async() => {
+					await awaitFunc3();
+
+					//console.log('Database更新: '+ (performance.now()-updateTime));
+				};
+
+				asyncFunc1().then(()=>console.log("他方マシン: "+performance.now())).catch(()=>console.log('Rejected'))
+
+
       }else{
         createV(snapshot);
         first = false;
